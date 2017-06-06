@@ -1,6 +1,6 @@
 # mhn-core-docker
 
-What this is:
+##What this is
 
 1. It's a subset of the [Modern Honey Network project](https://github.com/threatstream/mhn) that's set up to run in docker.
 2. The "broker" image runs an hpfeeds broker.  The broker allows clients to publish to channels or subscribe to channels.
@@ -9,104 +9,105 @@ What this is:
 5. In the broker container, an application called "geoloc" subscribes to the cowrie channel events and publishes a second channel with geolocation info added.
 6. Also in the broker container, an application called "honeymap" subscribes to the geoloc channel and makes a pretty map.  It listens on port 3000.
 
-Steps to make this work:
+##Steps to make this work
 
-# Create a docker network so you can statically IP your containers:
+Create a docker network so you can statically IP your containers:
 ```
 docker network create --subnet 192.168.0.0/24 honeynet
 ```
 
-# Change to the broker directory and build the docker image.
+Clone the repository and change to the broker directory and build the docker image.
 ```
+git clone https://github.com/MattCarothers/mhn-core-docker
 cd broker
 docker build -t broker .
 ```
 
-# Start the broker image.  Your host OS will now be listening on port 3000 for http requests into
-# honeymap.  If you prefer to forward ports with iptables or use a reverse proxy, leave out the
-# -p flag.  Events from hpfeeds will be written to /var/log/broker/mhn-json.log.
+Start the broker image.  Your host OS will now be listening on port 3000 for http requests into
+honeymap.  If you prefer to forward ports with iptables or use a reverse proxy, leave out the
+-p flag.  Events from hpfeeds will be written to /var/log/broker/mhn-json.log.
 ```
 docker run --name broker -v /var/log/broker:/var/log/mhn -d -p 3000:3000 \
 	--net honeynet --ip 192.168.0.2 broker
 ```
 
-# Add an hpfeeds auth key for the cowrie honeypot by inserting it into the mongo
-# database.  You should change this key.  Especially if you plan to expose
-# hpfeeds outside of your host.  You'll need to change it in cowrie/Dockerfile
-# too.
+Add an hpfeeds auth key for the cowrie honeypot by inserting it into the mongo
+database.  You should change this key.  Especially if you plan to expose
+hpfeeds outside of your host.  You'll need to change it in cowrie/Dockerfile
+too.
 ```
 cd ..
 ./add_cowrie_user.sh
 ```
 
-# Optional: create a honeypot user on the host OS to own the cowrie log
-# directory.  Set the uid of the new user in cowrie/Dockerfile.
-#
-# Create the honeypot image
+Optional: create a honeypot user on the host OS to own the cowrie log
+directory.  Set the uid of the new user in cowrie/Dockerfile.
+
+Create the honeypot image
 ```
 cd cowrie
 docker build -t cowrie .
 ```
 
-# Create a log directory for the honeypot.  Change ownership to uid 1000 (default)
-# or whatever your honeypot user is if you created one.  Creating this directory
-# isn't strictly necessary, but it's helpful for troubleshooting.
+Create a log directory for the honeypot.  Change ownership to uid 1000 (default)
+or whatever your honeypot user is if you created one.  Creating this directory
+isn't strictly necessary, but it's helpful for troubleshooting.
 ```
 mkdir /var/log/cowrie
 chown 1000 /var/log/cowrie
 ```
 
-# Start the honeypot.  Your host will now be listening on 22 and 23.  If you're 
-# forwarding ports with iptables, leave out the -p flags.
+Start the honeypot.  Your host will now be listening on 22 and 23.  If you're 
+forwarding ports with iptables, leave out the -p flags.
 ```
 docker run -d --name cowrie -v /var/log/cowrie:/opt/cowrie/log \
 	--net honeynet --ip 192.168.0.3 --link broker -p 22:22 -p 23:23 cowrie
 ```
 
-# Add an hpfeeds auth key for the dionaea honeypot by inserting it into the
-# mongo database.  You should change this key.  Especially if you plan to expose
-# hpfeeds outside of your host.  You'll need to change it in dionaea/Dockerfile
-# too.
+Add an hpfeeds auth key for the dionaea honeypot by inserting it into the
+mongo database.  You should change this key.  Especially if you plan to expose
+hpfeeds outside of your host.  You'll need to change it in dionaea/Dockerfile
+too.
 ```
 cd ..
 ./add_dionaea_user.sh
 ```
 
-# Optional: edit the dionaea config file and set any options you want
+Optional: edit the dionaea config file and set any options you want
 ```
 vi dionaea/dionaea.conf
 ```
 
-# Optional: create a honeypot user on the host OS to own the dionaea log
-# directory.  Set the uid of the new user in dionaea/Dockerfile.
-#
-# Create the honeypot image
+Optional: create a honeypot user on the host OS to own the dionaea log
+directory.  Set the uid of the new user in dionaea/Dockerfile.
+
+Create the honeypot image
 ```
 cd dionaea
 docker build -t dionaea .
 ```
 
-# Create a log directory for the honeypot.  Change ownership to uid 1000
-# (default) or whatever your honeypot user is if you created one.  You'll
-# want to map a directory on the host OS if you're storing binaries, sqllite
-# logs, or other stuff you want to access.  The default config stores binaries
-# and sends events via hpfeeds to the broker.
+Create a log directory for the honeypot.  Change ownership to uid 1000
+(default) or whatever your honeypot user is if you created one.  You'll
+want to map a directory on the host OS if you're storing binaries, sqllite
+logs, or other stuff you want to access.  The default config stores binaries
+and sends events via hpfeeds to the broker.
 ```
 mkdir /var/log/dionaea
 chown 1000 /var/log/dionaea
 ```
 
-# Start the honeypot.  Your host will now be listening on a bunch of ports.
-# If you're forwarding ports with iptables, leave out the -P flag.
+Start the honeypot.  Your host will now be listening on a bunch of ports.
+If you're forwarding ports with iptables, leave out the -P flag.
 ```
 docker run -d --name dionaea -v /var/log/dionaea:/opt/dionaea/var/dionaea \
 	--net honeynet --ip 192.168.0.4 --link broker -P dionaea
 ```
 
-# iptables configuration
-#
-# If you have a dark subnet routed to your host, you'll need to perform some additional configuration
-# in order to get packets to the honeypot.
+##iptables configuration
+
+If you have a dark subnet routed to your host, you'll need to perform some additional configuration
+in order to get packets to the honeypot.
 
 ```
 # Clear existing rules
