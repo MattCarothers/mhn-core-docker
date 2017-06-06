@@ -1,6 +1,6 @@
 # mhn-core-docker
 
-##What this is
+## What this is
 
 1. It's a subset of the [Modern Honey Network project](https://github.com/threatstream/mhn) that's set up to run in docker.
 2. The "broker" image runs an hpfeeds broker.  The broker allows clients to publish to channels or subscribe to channels.
@@ -9,7 +9,7 @@
 5. In the broker container, an application called "geoloc" subscribes to the cowrie channel events and publishes a second channel with geolocation info added.
 6. Also in the broker container, an application called "honeymap" subscribes to the geoloc channel and makes a pretty map.  It listens on port 3000.
 
-##Steps to make this work
+## Steps to make this work
 
 Create a docker network so you can statically IP your containers:
 ```
@@ -104,7 +104,7 @@ docker run -d --name dionaea -v /var/log/dionaea:/opt/dionaea/var/dionaea \
 	--net honeynet --ip 192.168.0.4 --link broker -P dionaea
 ```
 
-##iptables configuration
+## iptables configuration
 
 If you have a dark subnet routed to your host, you'll need to perform some additional configuration
 in order to get packets to the honeypot.
