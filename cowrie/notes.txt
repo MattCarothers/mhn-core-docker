@@ -1,0 +1,21 @@
+touch /etc/authbind/byport/23
+chown cowrie /etc/authbind/byport/23
+chmod 770 /etc/authbind/byport/23
+
+[telnet]
+
+# Enable Telnet support, disabled by default
+***enabled = true
+
+# IP addresses to listen for incoming Telnet connections.
+#
+# (default: 0.0.0.0) = any IPv4 address
+#listen_addr = 0.0.0.0
+# (use :: for listen to all IPv6 and IPv4 addresses)
+#listen_addr = ::
+
+
+# Port to listen for incoming Telnet connections.
+#
+# (default: 2223)
+***listen_port = 23
