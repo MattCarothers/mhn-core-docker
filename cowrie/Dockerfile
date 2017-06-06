@@ -34,6 +34,10 @@ RUN git clone https://github.com/threatstream/mhn
 # Run the install script.  The script will generate a bunch of errors, but we don't care.
 WORKDIR /usr/src/mhn/scripts
 RUN sed -i -e 's/set -e/#set -e/' deploy_cowrie.sh ; \
+	# Cowrie has deprecated start/stop.sh \
+	sed -i -e 's/start.sh env/bin\/cowrie start/' deploy_cowrie.sh ; \
+	sed -i -e 's/start.sh/bin\/cowrie/' deploy_cowrie.sh ; \
+	sed -i -e 's/ env/ cowrie-env/' deploy_cowrie.sh ; \
 	bash deploy_cowrie.sh foo bar ; \
 	apt-get -y purge '.*-dev' 
 
