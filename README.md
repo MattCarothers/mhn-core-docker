@@ -16,7 +16,7 @@ Create a docker network so you can statically IP your containers:
 docker network create --subnet 192.168.0.0/24 honeynet
 ```
 
-Clone the repository and change to the broker directory and build the docker image.
+Clone the repository, change to the broker directory, and build the docker image.
 ```
 git clone https://github.com/MattCarothers/mhn-core-docker
 cd broker
@@ -32,7 +32,7 @@ docker run --name broker -v /var/log/broker:/var/log/mhn -d -p 3000:3000 \
 ```
 
 Add an hpfeeds auth key for the cowrie honeypot by inserting it into the mongo
-database.  You should change this key.  Especially if you plan to expose
+database.  You should edit this script and change the key.  Especially if you plan to expose
 hpfeeds outside of your host.  You'll need to change it in cowrie/Dockerfile
 too.
 ```
@@ -43,7 +43,7 @@ cd ..
 Optional: create a honeypot user on the host OS to own the cowrie log
 directory.  Set the uid of the new user in cowrie/Dockerfile.
 
-Create the honeypot image
+Create the honeypot image.
 ```
 cd cowrie
 docker build -t cowrie .
@@ -65,7 +65,7 @@ docker run -d --name cowrie -v /var/log/cowrie:/opt/cowrie/log \
 ```
 
 Add an hpfeeds auth key for the dionaea honeypot by inserting it into the
-mongo database.  You should change this key.  Especially if you plan to expose
+mongo database.  You should edit this script and change the key.  Especially if you plan to expose
 hpfeeds outside of your host.  You'll need to change it in dionaea/Dockerfile
 too.
 ```
@@ -73,7 +73,7 @@ cd ..
 ./add_dionaea_user.sh
 ```
 
-Optional: edit the dionaea config file and set any options you want
+Optional: edit the dionaea config file and set any options you want.
 ```
 vi dionaea/dionaea.conf
 ```
@@ -81,7 +81,7 @@ vi dionaea/dionaea.conf
 Optional: create a honeypot user on the host OS to own the dionaea log
 directory.  Set the uid of the new user in dionaea/Dockerfile.
 
-Create the honeypot image
+Create the honeypot image.
 ```
 cd dionaea
 docker build -t dionaea .
