@@ -27,7 +27,7 @@ Start the broker image.  Your host OS will now be listening on port 3000 for htt
 honeymap.  If you prefer to forward ports with iptables or use a reverse proxy, leave out the
 -p flag.  Events from hpfeeds will be written to /var/log/broker/mhn-json.log.
 ```
-docker run --name broker -v /var/log/broker:/var/log/mhn -d -p 3000:3000 \
+docker run --name broker -v /var/log/broker:/var/log/mhn -d -p 3000 \
 	--net honeynet --ip 192.168.0.2 broker
 ```
 
@@ -58,10 +58,11 @@ chown 1000 /var/log/cowrie
 ```
 
 Start the honeypot.  Your host will now be listening on 22 and 23.  If you're 
-forwarding ports with iptables, leave out the -p flags.
+forwarding ports with iptables, leave out the -p flags.  NB: If your host has
+ssh running on port 22 already, docker won't be able to bind to it.
 ```
 docker run -d --name cowrie -v /var/log/cowrie:/opt/cowrie/log \
-	--net honeynet --ip 192.168.0.3 --link broker -p 22:22 -p 23:23 cowrie
+	--net honeynet --ip 192.168.0.3 --link broker -p 22 -p 23 cowrie
 ```
 
 Add an hpfeeds auth key for the dionaea honeypot by inserting it into the
@@ -98,10 +99,14 @@ chown 1000 /var/log/dionaea
 ```
 
 Start the honeypot.  Your host will now be listening on a bunch of ports.
-If you're forwarding ports with iptables, leave out the -P flag.
+If you're forwarding ports with iptables, leave out the -p flags.
 ```
 docker run -d --name dionaea -v /var/log/dionaea:/opt/dionaea/var/dionaea \
-	--net honeynet --ip 192.168.0.4 --link broker -P dionaea
+	--net honeynet --ip 192.168.0.4 --link broker \
+	-p 21 -p 42 -p 80 -p 135 -p 443 -p 445 -p 1433 \
+	-p 1723 -p 1883 -p 3306 -p 5060 -p 5061 \
+	-p 69/udp -p 1900/udp -p 5060/udp \
+	dionaea
 ```
 
 ## iptables configuration
