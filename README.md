@@ -9,6 +9,8 @@
 5. In the broker container, an application called "geoloc" subscribes to the cowrie channel events and publishes a second channel with geolocation info added.
 6. Also in the broker container, an application called "honeymap" subscribes to the geoloc channel and makes a pretty map.  It listens on port 3000.
 
+![Data Flow Diagram](https://mattcarothers.github.io/mhn-core-docker/data-flow-diagram.png)
+
 ## Steps to make this work
 
 Create a docker network so you can statically IP your containers:
