@@ -30,6 +30,7 @@ honeymap.  If you prefer to forward ports with iptables or use a reverse proxy, 
 -p flag.  Events from hpfeeds will be written to /var/log/broker/mhn-json.log.
 ```
 docker run --name broker -v /var/log/broker:/var/log/mhn -d \
+	--restart unless-stopped \
 	-p 3000:3000 \
 	--net honeynet --ip 192.168.0.2 broker
 ```
@@ -65,6 +66,7 @@ forwarding ports with iptables, leave out the -p flags.  NB: If your host has
 ssh running on port 22 already, docker won't be able to bind to it.
 ```
 docker run -d --name cowrie -v /var/log/cowrie:/opt/cowrie/log \
+	--restart unless-stopped \
 	--net honeynet --ip 192.168.0.3 --link broker \
 	-p 22:22 -p 23:23 \
 	cowrie
@@ -108,6 +110,7 @@ If you're forwarding ports with iptables, leave out the -p flags.
 ```
 docker run -d --name dionaea -v /var/log/dionaea:/opt/dionaea/var/dionaea \
 	--net honeynet --ip 192.168.0.4 --link broker \
+	--restart unless-stopped \
 	-p 21:21 -p 42:42 -p 80:80 -p 135:135 -p 443:443 -p 445:445 -p 1433:1433 \
 	-p 1723:1723 -p 1883:1883 -p 3306:3306 -p 5060:5060 -p 5061:5061 \
 	-p 69:69/udp -p 1900:1900/udp -p 5060:5060/udp \
