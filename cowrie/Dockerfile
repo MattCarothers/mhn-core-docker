@@ -46,7 +46,9 @@ RUN sed -i -e 's/logfile = log\/cowrie.json/#logfile = log\/cowrie.json/' \
 		/opt/cowrie/cowrie.cfg ; \
 	sed -i -e 's/^enabled = false/enabled = true/' \
 		/opt/cowrie/cowrie.cfg ; \
-	sed -i -e 's/^#listen_port = 2223/listen_port = 23/' \
+	sed -i -e 's/^listen_endpoints = tcp:2222/listen_endpoints = tcp:22/' \
+		/opt/cowrie/cowrie.cfg ; \
+	sed -i -e 's/^listen_endpoints = tcp:2223/listen_endpoints = tcp:23/' \
 		/opt/cowrie/cowrie.cfg ; \
 	touch /etc/authbind/byport/23; \
 	chown cowrie /etc/authbind/byport/23; \
