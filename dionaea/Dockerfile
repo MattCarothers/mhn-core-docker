@@ -62,6 +62,7 @@ RUN \
 	make install && \
 	# Format string update for Python 3.4+ \
 	sed -i -e 's/{:s}/{!s:s}/g' /opt/dionaea/lib/dionaea/python/dionaea/sip/__init__.py && \
+	sed -i -e 's/{:/{!s:/g' /opt/dionaea/lib/dionaea/python/dionaea/mssql/mssql.py && \
 	chown $DIONAEA_UID /opt/dionaea/var/dionaea
 
 COPY dionaea.conf /opt/dionaea/etc/dionaea/
