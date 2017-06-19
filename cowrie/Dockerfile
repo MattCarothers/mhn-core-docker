@@ -57,8 +57,10 @@ RUN sed -i -e 's/logfile = log\/cowrie.json/#logfile = log\/cowrie.json/' \
 EXPOSE 22
 EXPOSE 23
 
+COPY run.sh /
+
 WORKDIR /opt/cowrie
-CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
+CMD ["/run.sh"]
 
 # How to run the container:
 #
