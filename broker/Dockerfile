@@ -4,7 +4,7 @@ RUN apt-get update
 RUN apt-get install -y git wget supervisor sudo
 
 WORKDIR /usr/src
-RUN git clone https://github.com/threatstream/mhn
+RUN git clone https://github.com/MattCarothers/mhn
 
 # Mongo needs to be running before we can install anything else.
 # install_mongo also runs from install_hpfeeds, but it doesn't
