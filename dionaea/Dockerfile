@@ -53,7 +53,7 @@ RUN \
 	autoreconf -vi && \
 	ln -s /usr/bin/python3 /usr/bin/python3.2 && \
 	ln -s /usr/bin/cython3 /usr/bin/cython && \
-	pip3 install pyev && \
+	pip3 install -e git+https://github.com/HurricaneLabs/pyev.git#egg=pyev && \
 	./configure --disable-werror --prefix=/opt/dionaea \
 		--with-lcfg-include=/opt/dionaea/include/ \
 		--with-lcfg-lib=/opt/dionaea/lib/ && \
