@@ -14,6 +14,7 @@ WORKDIR /usr/src/mhn/scripts
 RUN ./install_mongo.sh ; \
 	mkdir -p /var/log/mhn ; \
 	/etc/init.d/supervisor start ; \
+	sed -i '/pip install pymongo/a pip install -e git+https:\/\/github.com\/HurricaneLabs\/pyev.git#egg=pyev' install_hpfeeds.sh ; \
 	./install_hpfeeds.sh ; \
 	./install_honeymap.sh ; \
 	./install_hpfeeds-logger-json.sh ; \
