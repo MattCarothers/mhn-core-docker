@@ -9,7 +9,7 @@ RUN git clone https://github.com/MattCarothers/mhn
 # Mongo needs to be running before we can install anything else.
 # install_mongo also runs from install_hpfeeds, but it doesn't
 # start the daemon, so we have to run it alone first.
-COPY mongod.conf /etc/supervisor/conf.d/
+COPY mongodb.conf /etc/supervisor/conf.d/
 WORKDIR /usr/src/mhn/scripts
 RUN ./install_mongo.sh ; \
 	mkdir -p /var/log/mhn ; \
